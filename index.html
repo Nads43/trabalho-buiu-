@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Metas em Nuvem | 2027-2030</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="main-container">
+  <header class="hero">
+    <h1>Horizonte de Objetivos</h1>
+    <p>Acompanhamento de metas de longo prazo</p>
+  </header>
+
+  <div class="goals-grid">
+    <div class="goal-card float-1" onclick="openGoal('moto')">
+      <h3>Comprar moto</h3>
+      <p>Mobilidade própria e agilidade no cotidiano urbano.</p>
+      <div class="deadline-text">Conclusão 2027</div>
+    </div>
+
+    <div class="goal-card float-2" onclick="openGoal('ingles')">
+      <h3>Aprender Inglês</h3>
+      <p>Capacitação linguística para expansão profissional.</p>
+      <div class="deadline-text">Conclusão 2028</div>
+    </div>
+
+    <div class="goal-card float-3" onclick="openGoal('morar')">
+      <h3>Morar Sozinho</h3>
+      <p>Independência domiciliar e gestão de espaço próprio.</p>
+      <div class="deadline-text">Conclusão 2029</div>
+    </div>
+
+    <div class="goal-card float-4" onclick="openGoal('carrinho')">
+      <h3>Carrinho Elétrico</h3>
+      <p>Desenvolvimento e montagem de veículo elétrico.</p>
+      <div class="deadline-text">Conclusão 2030</div>
+    </div>
+  </div>
+
+  <footer>
+    PROJEÇÃO TEMPORAL 2027-2030
+  </footer>
+</div>
+
+<div id="goalModal" class="modal">
+  <div class="modal-content" id="modalInner"></div>
+</div>
+
+<script>
+  const goalsConfig = {
+    moto: { nome: "Comprar moto", ano: 2027, frase: "Foco no trajeto até a liberdade." },
+    ingles: { nome: "Aprender Inglês", ano: 2028, frase: "Novas palavras, novos mundos." },
+    morar: { nome: "Morar Sozinho", ano: 2029, frase: "Construindo o seu próprio refúgio." },
+    carrinho: { nome: "Carrinho Elétrico", ano: 2030, frase: "Energia aplicada em movimento." }
+  };
+
+  let timerInterval;
+
+  function openGoal(id) {
+    const config = goalsConfig[id];
+    const targetDate = new Date(config.ano, 11, 31, 23, 59, 59);
+    
+    const update = () => {
+      const now = new Date();
+      const diff = targetDate - now;
+      
+      const parts = {
+        Anos: Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25)),
+        Meses: Math.floor((diff % (1000 * 60 * 60 * 24 * 365.25)) / (1000 * 60 * 60 * 24 * 30.44)),
+        Dias: Math.floor((diff % (1000 * 60 * 60 * 24 * 30.44)) / (1000 * 60 * 60 * 24)),
+        Min: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+      };
+
+      document.getElementById("modalInner").innerHTML = `
+        <h2 style="font-weight: 300; color: #475569; margin-bottom: 0.5rem;">${config.nome}</h2>
+        <p style="color: #cbd5e1; font-size: 0.8rem; text-transform: uppercase;">Prazo limite: Dezembro ${config.ano}</p>
+        <div class="timer-display">
+          ${Object.entries(parts).map(([label, val]) => `
+            <div class="timer-unit">
+              <span class="timer-val">${val}</span>
+              <span class="timer-label">${label}</span>
+            </div>
+          `).join('')}
+        </div>
+        <p style="color: #94a3b8; font-style: italic; margin-bottom: 2rem;">"${config.frase}"</p>
+        <button class="close-btn" onclick="closeModal()">Voltar ao Horizonte</button>
+      `;
+    };
+
+    update();
+    timerInterval = setInterval(update, 1000);
+    document.getElementById("goalModal").style.display = "flex";
+  }
+
+  function closeModal() {
+    document.getElementById("goalModal").style.display = "none";
+    clearInterval(timerInterval);
+  }
+
+  window.onclick = (e) => {
+    if (e.target.classList.contains('modal')) closeModal();
+  }
+</script>
+
+</body>
+</html>
